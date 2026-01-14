@@ -1,0 +1,1230 @@
+{
+  "models": [
+    {
+      "fileName": "z_image_turbo_bf16.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors",
+      "type": "diffusion_model",
+      "precision": "bf16",
+      "downloadDestination": "/ComfyUI/models/diffusion_models",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/Z_Image_Turbo.json",
+        "zit/Z_Image_Turbo_Upscale.json",
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "fileName": "qwen_3_4b.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors",
+      "type": "text_encoder",
+      "precision": "unknown",
+      "downloadDestination": "/ComfyUI/models/text_encoders",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/Z_Image_Turbo.json",
+        "zit/Z_Image_Turbo_Upscale.json"
+      ]
+    },
+    {
+      "fileName": "qwen-4b-zimage-heretic-q8.gguf",
+      "source": "https://huggingface.co/Lockout/qwen3-4b-heretic-zimage/resolve/main/qwen-4b-zimage-heretic-q8.gguf",
+      "type": "text_encoder",
+      "precision": "q8_gguf",
+      "downloadDestination": "/ComfyUI/models/text_encoders",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "fileName": "ae.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors",
+      "type": "vae",
+      "downloadDestination": "/ComfyUI/models/vae",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/Z_Image_Turbo.json",
+        "zit/Z_Image_Turbo_Upscale.json"
+      ]
+    },
+    {
+      "fileName": "zImageTurbo_vae.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors",
+      "type": "vae",
+      "downloadDestination": "/ComfyUI/models/vae",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "fileName": "4xLSDIR.pth",
+      "source": "https://huggingface.co/LS110824/upscale/resolve/main/4xLSDIR.pth",
+      "type": "upscale_model",
+      "downloadDestination": "/ComfyUI/models/upscale_models",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Video Extend",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS",
+        "VACE",
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "fileName": "HMFemme_V1.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/Z_Image_Turbo.json",
+        "zit/Z_Image_Turbo_Upscale.json",
+        "qwen/HMFemme_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "HearmemanAI_V4_Rank128_BreastsLoRA_Epoch80.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/Z_Image_Turbo.json",
+        "zit/Z_Image_Turbo_Upscale.json",
+        "qwen/Qwen_Workflow.json",
+        "qwen/HMFemme_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "Lily01_epoch80.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/Z_Image_Turbo.json",
+        "zit/Z_Image_Turbo_Upscale.json",
+        "qwen/Qwen_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "Greta01_epoch80.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/Z_Image_Turbo.json",
+        "zit/Z_Image_Turbo_Upscale.json",
+        "qwen/Qwen_Workflow.json",
+        "qwen/HMFemme_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "zimage_margotrobbie_v1.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "ZIT",
+      "usedInWorkflows": [
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "fileName": "qwen_image_bf16.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_bf16.safetensors",
+      "type": "diffusion_model",
+      "precision": "bf16",
+      "downloadDestination": "/ComfyUI/models/diffusion_models",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/Qwen_Workflow_Slower_Higher_Quality.json",
+        "qwen/Qwen_Workflow.json",
+        "qwen/HMFemme_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "qwen_image_edit_2509_bf16.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_edit_2509_bf16.safetensors",
+      "type": "diffusion_model",
+      "precision": "bf16",
+      "downloadDestination": "/ComfyUI/models/diffusion_models",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/Qwen_image_edit.json",
+        "qwen/Qwen_Image_To_Dateset_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "disk_qwen_image_edit_2509_bf16.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "diffusion_model",
+      "precision": "bf16",
+      "downloadDestination": "/ComfyUI/models/diffusion_models",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/Qwen_MultiAngle_image_edit.json"
+      ]
+    },
+    {
+      "fileName": "qwen_2.5_vl_7b.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b.safetensors",
+      "type": "text_encoder",
+      "precision": "bf16",
+      "downloadDestination": "/ComfyUI/models/text_encoders",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/Qwen_MultiAngle_image_edit.json",
+        "qwen/Qwen_Workflow_Slower_Higher_Quality.json",
+        "qwen/Qwen_image_edit.json",
+        "qwen/Qwen_Image_To_Dateset_Workflow.json",
+        "qwen/Qwen_Workflow.json",
+        "qwen/HMFemme_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "qwen_image_vae.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/vae/qwen_image_vae.safetensors",
+      "type": "vae",
+      "downloadDestination": "/ComfyUI/models/vae",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/Qwen_MultiAngle_image_edit.json",
+        "qwen/Qwen_Workflow_Slower_Higher_Quality.json",
+        "qwen/Qwen_image_edit.json",
+        "qwen/Qwen_Image_To_Dateset_Workflow.json",
+        "qwen/Qwen_Workflow.json",
+        "qwen/HMFemme_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "Qwen-Image-Lightning-8steps-V1.1.safetensors",
+      "source": "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.1.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/Qwen_image_edit.json",
+        "qwen/Qwen_Image_To_Dateset_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "Qwen-Image-Lightning-8steps-V2.0.safetensors",
+      "source": "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V2.0.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/Qwen_MultiAngle_image_edit.json"
+      ]
+    },
+    {
+      "fileName": "MultiAngle.safetensors",
+      "source": "https://huggingface.co/dx8152/Qwen-Edit-2509-Multiple-angles/resolve/main/%E9%95%9C%E5%A4%B4%E8%BD%AC%E6%8D%A2.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/Qwen_MultiAngle_image_edit.json"
+      ]
+    },
+    {
+      "fileName": "V7_epoch90VaginaLoRA_HearmemanAI_rank128.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "Qwen",
+      "usedInWorkflows": [
+        "qwen/HMFemme_Workflow.json"
+      ]
+    },
+    {
+      "fileName": "wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+      "type": "diffusion_model",
+      "precision": "fp8",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/WAN 2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/WAN 2.2 FLF2V.json"
+      ]
+    },
+    {
+      "fileName": "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+      "type": "diffusion_model",
+      "precision": "fp8",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/WAN 2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/WAN 2.2 FLF2V.json"
+      ]
+    },
+    {
+      "fileName": "wan2.2_i2v_high_noise_14B_fp16.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors",
+      "type": "diffusion_model",
+      "precision": "fp16",
+      "downloadDestination": "/ComfyUI/models/diffusion_models",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "SVI_Video_Extension"
+      ]
+    },
+    {
+      "fileName": "wan2.2_i2v_low_noise_14B_fp16.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors",
+      "type": "diffusion_model",
+      "precision": "fp16",
+      "downloadDestination": "/ComfyUI/models/diffusion_models",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "SVI_Video_Extension"
+      ]
+    },
+    {
+      "fileName": "wan2.2_i2v_A14b_high_noise_scaled_fp8_e4m3_lightx2v_4step_comfyui_1030.safetensors",
+      "source": "https://huggingface.co/lightx2v/Wan2.2-Distill-Models/resolve/main/wan2.2_i2v_A14b_high_noise_scaled_fp8_e4m3_lightx2v_4step_comfyui_1030.safetensors",
+      "type": "diffusion_model",
+      "precision": "fp8",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/wan2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/SVI pro.json"
+      ]
+    },
+    {
+      "fileName": "wan2.2_i2v_A14b_low_noise_scaled_fp8_e4m3_lightx2v_4step_comfyui.safetensors",
+      "source": "https://huggingface.co/lightx2v/Wan2.2-Distill-Models/resolve/main/wan2.2_i2v_A14b_low_noise_scaled_fp8_e4m3_lightx2v_4step_comfyui.safetensors",
+      "type": "diffusion_model",
+      "precision": "fp8",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/wan2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/SVI pro.json"
+      ]
+    },
+    {
+      "fileName": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "type": "text_encoder",
+      "precision": "fp8",
+      "downloadDestination": "/ComfyUI/models/text_encoders",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend",
+        "Wan_Animate_V2",
+        "SVI_Video_Extension",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS",
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "fileName": "umt5-xxl-encoder-Q5_K_M.gguf",
+      "source": "https://huggingface.co/city96/umt5-xxl-encoder-gguf/resolve/0e9a7657447c3a2215edf3a7c5a081633102d19c/umt5-xxl-encoder-Q5_K_M.gguf",
+      "type": "text_encoder",
+      "precision": "q5_k_m_gguf",
+      "downloadDestination": "/ComfyUI/models/text_encoders",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/WAN 2.2 FLF2V.json"
+      ]
+    },
+    {
+      "fileName": "wan_2.1_vae.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors",
+      "type": "vae",
+      "downloadDestination": "/ComfyUI/models/vae",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend",
+        "Wan_Animate_V2",
+        "SVI_Video_Extension",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS",
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "fileName": "clip_vision_h.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors",
+      "type": "clip_vision",
+      "downloadDestination": "/ComfyUI/models/clip_vision",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend",
+        "Wan_Animate_V2",
+        "Native-I2V-60FPS",
+        "Steady_Dancer",
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "fileName": "lightx2v_I2V_14B_480p_cfg_step_distill_rank32_bf16.safetensors",
+      "source": "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank32_bf16.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/WAN 2.2 FLF2V.json"
+      ]
+    },
+    {
+      "fileName": "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+      "source": "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Lightx2v/lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "fileName": "SVI_v2_PRO_Wan2.2-I2V-A14B_LOW_lora_rank_128_fp16.safetensors",
+      "source": "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/LoRAs/Stable-Video-Infinity/v2.0/SVI_v2_PRO_Wan2.2-I2V-A14B_LOW_lora_rank_128_fp16.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/SVI",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "SVI_Video_Extension"
+      ]
+    },
+    {
+      "fileName": "SVI_v2_PRO_Wan2.2-I2V-A14B_HIGH_lora_rank_128_fp16.safetensors",
+      "source": "https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/LoRAs/Stable-Video-Infinity/v2.0/SVI_v2_PRO_Wan2.2-I2V-A14B_HIGH_lora_rank_128_fp16.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/SVI",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "SVI_Video_Extension"
+      ]
+    },
+    {
+      "fileName": "wan2.2_t2v_A14b_high_noise_lora_rank64_lightx2v_4step_1217.safetensors",
+      "source": "https://huggingface.co/lightx2v/Wan2.2-Distill-Loras/resolve/main/wan2.2_t2v_A14b_high_noise_lora_rank64_lightx2v_4step_1217.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/lightx2v",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/SVI pro.json"
+      ]
+    },
+    {
+      "fileName": "wan2.2_i2v_A14b_low_noise_lora_rank64_lightx2v_4step_1022.safetensors",
+      "source": "https://huggingface.co/lightx2v/Wan2.2-Distill-Loras/resolve/main/wan2.2_i2v_A14b_low_noise_lora_rank64_lightx2v_4step_1022.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/lightx2v",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/SVI pro.json"
+      ]
+    },
+    {
+      "fileName": "i2v_lightx2v_high_noise_model.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "SVI_Video_Extension"
+      ]
+    },
+    {
+      "fileName": "i2v_lightx2v_low_noise_model.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "SVI_Video_Extension",
+        "Wan_Animate_V2",
+        "Steady_Dancer"
+      ]
+    },
+    {
+      "fileName": "ltx-2-19b-distilled-fp8.safetensors",
+      "source": "https://huggingface.co/Lightricks/LTX-2/resolve/main/ltx-2-19b-distilled-fp8.safetensors",
+      "type": "diffusion_model",
+      "precision": "fp8",
+      "downloadDestination": "/ComfyUI/models/diffusion_models",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/LTX2asmr.json"
+      ]
+    },
+    {
+      "fileName": "gemma_3_12B_it.safetensors",
+      "source": "https://huggingface.co/Comfy-Org/ltx-2/resolve/main/split_files/text_encoders/gemma_3_12B_it.safetensors",
+      "type": "text_encoder",
+      "downloadDestination": "/ComfyUI/models/text_encoders",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/LTX2asmr.json"
+      ]
+    },
+    {
+      "fileName": "gemma-3-12b-abliterated-text-encoder.safetensors",
+      "source": "https://huggingface.co/DreamFast/gemma-3-12b-it-heretic/blob/main/comfyui/gemma_3_12B_it_heretic.safetensors",
+      "type": "text_encoder",
+      "downloadDestination": "/ComfyUI/models/text_encoders",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/2ise5a.json"
+      ]
+    },
+    {
+      "fileName": "ltx-2-19b-embeddings_connector_bf16.safetensors",
+      "source": "https://huggingface.co/Kijai/LTXV2_comfy/resolve/main/text_encoders/ltx-2-19b-embeddings_connector_dev_bf16.safetensors",
+      "type": "text_encoder",
+      "precision": "bf16",
+      "downloadDestination": "/ComfyUI/models/text_encoders",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/2ise5a.json"
+      ]
+    },
+    {
+      "fileName": "LTX2_video_vae_bf16.safetensors",
+      "source": "https://huggingface.co/Kijai/LTXV2_comfy/resolve/main/VAE/LTX2_video_vae_bf16.safetensors",
+      "type": "vae",
+      "precision": "bf16",
+      "downloadDestination": "/ComfyUI/models/vae",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/2ise5a.json"
+      ]
+    },
+    {
+      "fileName": "LTX2_audio_vae_bf16.safetensors",
+      "source": "https://huggingface.co/Kijai/LTXV2_comfy/resolve/main/VAE/LTX2_audio_vae_bf16.safetensors",
+      "type": "vae",
+      "precision": "bf16",
+      "downloadDestination": "/ComfyUI/models/vae",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/2ise5a.json"
+      ]
+    },
+    {
+      "fileName": "ltx-2-spatial-upscaler-x2-1.0.safetensors",
+      "source": "https://huggingface.co/Lightricks/LTX-2/resolve/main/ltx-2-spatial-upscaler-x2-1.0.safetensors",
+      "type": "latent_upscale_model",
+      "downloadDestination": "/ComfyUI/models/latent_upscale_models",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/2ise5a.json",
+        "ltx2/LTX2asmr.json"
+      ]
+    },
+    {
+      "fileName": "ltx-2-19b-distilled-lora-384.safetensors",
+      "source": "https://huggingface.co/Lightricks/LTX-2/resolve/main/ltx-2-19b-distilled-lora-384.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/2ise5a.json"
+      ]
+    },
+    {
+      "fileName": "LTX2_BestBreasts_lora_V2_step_06000.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/LTX",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/2ise5a.json"
+      ]
+    },
+    {
+      "fileName": "ltx-2-19b-ic-lora-detailer.safetensors",
+      "source": "https://huggingface.co/Lightricks/LTX-2-19b-IC-LoRA-Detailer/resolve/main/ltx-2-19b-ic-lora-detailer.safetensors",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/LTX2asmr.json"
+      ]
+    },
+    {
+      "fileName": "ltx-av-step-1751000_vocoder_24K.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "checkpoint",
+      "downloadDestination": "/ComfyUI/models/checkpoints",
+      "associatedModel": "LTX2",
+      "usedInWorkflows": [
+        "ltx2/LTX2asmr.json"
+      ]
+    },
+    {
+      "fileName": "Wan2.1-Fun-Control1.3B.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "diffusion_model",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/wan2.2",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "Wan2_1-I2V-14B-480P_fp8_e5m2.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "diffusion_model",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/wan2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend"
+      ]
+    },
+    {
+      "fileName": "wan2.1_i2v_480p_14B_bf16.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "diffusion_model",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/wan2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-I2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "wan2.1_t2v_1.3B_bf16.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "diffusion_model",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/wan2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend"
+      ]
+    },
+    {
+      "fileName": "wan2.1_t2v_14B_bf16.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "diffusion_model",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/wan2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "wan2.2_animate_14B_bf16.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "diffusion_model",
+      "downloadDestination": "/ComfyUI/models/diffusion_models/wan2.2",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Wan_Animate_V2",
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "fileName": "BouncyWalkV01.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "BreastsLoRA_ByHearmemanAI_LowNoise-000070.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Wan_Animate_V2"
+      ]
+    },
+    {
+      "fileName": "FILM_NOIR_EPOCH10.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend"
+      ]
+    },
+    {
+      "fileName": "Haley_epoch_48.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "I2V-tittydrop-e26.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "P004-Lying-Bouncing-i2v-v10-000010.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "Sydney01_LowNoise.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Wan_Animate_V2"
+      ]
+    },
+    {
+      "fileName": "Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "VACE"
+      ]
+    },
+    {
+      "fileName": "Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/lightx2v",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "VACE",
+        "HearmemanAI_Wan_Infinite_Talk"
+      ]
+    },
+    {
+      "fileName": "Wan_Breast_Helper_Hearmeman.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-I2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "ahegao_v1_e35_wan.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "aidmaMJ6.1SDXL-v0.5.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras"
+    },
+    {
+      "fileName": "big_tits_epoch_50.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "deepthroat_epoch_80.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "detailz-wan.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend",
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "dicks_epoch_100.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "doggyPOV_v1_1.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "epoch60.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "erect_penis_epoch_80.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "masturbation_cumshot_wanI2V480p_v1.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "princess_45_epochs.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend"
+      ]
+    },
+    {
+      "fileName": "sdxl_lightning_8step_lora.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras"
+    },
+    {
+      "fileName": "wan2.2_animate_14B_relight_lora_bf16.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Wan_Animate_V2",
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "fileName": "wan_cowgirl_v1.3.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "wan_female_masturbation.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "wan_pov_blowjob.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "fileName": "wan_pov_missionary.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2"
+    },
+    {
+      "fileName": "woman_undressing_v1.0_wan14b_epoch048.safetensors",
+      "source": "NEEDS_SOURCE",
+      "type": "lora",
+      "downloadDestination": "/ComfyUI/models/loras/Wan",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Native-T2V-60FPS"
+      ]
+    }
+  ],
+  "custom_nodes": [
+    {
+      "name": "VibeVoice-ComfyUI",
+      "source": "https://github.com/Enemyx-net/VibeVoice-ComfyUI",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/VibeVoice-ComfyUI",
+      "associatedModel": "VibeVoice",
+      "usedInWorkflows": [
+        "HearmemanAI_Wan_Infinite_Talk"
+      ]
+    },
+    {
+      "name": "ComfyUI-KJNodes",
+      "cnr_id": "comfyui-kjnodes",
+      "source": "https://github.com/kijai/ComfyUI-KJNodes",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-KJNodes",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Video Extend",
+        "Wan_Animate_V2",
+        "SVI_Video_Extension",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS",
+        "VACE",
+        "Steady_Dancer",
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "name": "ComfyUI_JPS-Nodes",
+      "cnr_id": "ComfyUI_JPS-Nodes",
+      "source": "https://github.com/JPS-GER/ComfyUI_JPS-Nodes",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI_JPS-Nodes",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Video Extend",
+        "VACE",
+        "Steady_Dancer"
+      ]
+    },
+    {
+      "name": "ComfyUI_essentials",
+      "cnr_id": "comfyui_essentials",
+      "source": "https://github.com/cubiq/ComfyUI_essentials",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI_essentials",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Video Extend",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS",
+        "VACE",
+        "Steady_Dancer"
+      ]
+    },
+    {
+      "name": "ComfyUI-Easy-Use",
+      "cnr_id": "comfyui-easy-use",
+      "source": "https://github.com/yolain/ComfyUI-Easy-Use",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-Easy-Use",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Video Extend",
+        "SVI_Video_Extension",
+        "Native-T2V-60FPS",
+        "VACE"
+      ]
+    },
+    {
+      "name": "ComfyUI-VideoHelperSuite",
+      "cnr_id": "comfyui-videohelpersuite",
+      "source": "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Video Extend",
+        "Wan_Animate_V2",
+        "SVI_Video_Extension",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS",
+        "VACE",
+        "Steady_Dancer"
+      ]
+    },
+    {
+      "name": "rgthree-comfy",
+      "cnr_id": "rgthree-comfy",
+      "source": "https://github.com/rgthree/rgthree-comfy",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/rgthree-comfy",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Native-I2V-60FPS",
+        "Video Extend",
+        "Native-T2V-60FPS"
+      ]
+    },
+    {
+      "name": "RES4LYF",
+      "cnr_id": "RES4LYF",
+      "source": "https://github.com/ClownsharkBatwing/RES4LYF",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/RES4LYF",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "qwen/HMFemme_Workflow.json",
+        "qwen/Qwen_Workflow_Slower_Higher_Quality.json",
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "name": "ComfyLiterals",
+      "cnr_id": "ComfyLiterals",
+      "source": "https://github.com/M1kep/ComfyLiterals",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyLiterals",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Video Extend",
+        "Steady_Dancer"
+      ]
+    },
+    {
+      "name": "ComfyUI-Impact-Pack",
+      "cnr_id": "comfyui-impact-pack",
+      "source": "https://github.com/ltdrdata/ComfyUI-Impact-Pack",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-Impact-Pack",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Video Extend",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS"
+      ]
+    },
+    {
+      "name": "ComfyUI-GGUF",
+      "cnr_id": "comfyui-gguf",
+      "source": "https://github.com/city96/ComfyUI-GGUF",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-GGUF",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "wan2.2/WAN 2.2 FLF2V.json",
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "name": "ComfyUI_Comfyroll_CustomNodes",
+      "cnr_id": "ComfyUI_Comfyroll_CustomNodes",
+      "source": "https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI_Comfyroll_CustomNodes",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "qwen/Qwen_MultiAngle_image_edit.json",
+        "qwen/Qwen_Image_To_Dateset_Workflow.json"
+      ]
+    },
+    {
+      "name": "ComfyUI_UltimateSDUpscale",
+      "cnr_id": "comfyui_ultimatesdupscale",
+      "source": "https://github.com/ssitu/ComfyUI_UltimateSDUpscale",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI_UltimateSDUpscale",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "Misc"
+      ]
+    },
+    {
+      "name": "ComfyUI-FSampler",
+      "cnr_id": "comfyui-FSampler",
+      "source": "https://github.com/obisin/ComfyUI-FSampler",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-FSampler",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "qwen/HMFemme_Workflow.json"
+      ]
+    },
+    {
+      "name": "comfyui_fill-nodes",
+      "cnr_id": "comfyui_fill-nodes",
+      "source": "https://github.com/filliptm/ComfyUI_Fill-Nodes",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI_Fill-Nodes",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "ltx2/LTX2asmr.json"
+      ]
+    },
+    {
+      "name": "wan22fmlf",
+      "cnr_id": "wan22fmlf",
+      "source": "NEEDS_SOURCE",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/wan22fmlf",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "wan2.2/SVI pro.json",
+        "wan2.2/SVI_Video_Extension_HearmemanAI.json"
+      ]
+    },
+    {
+      "name": "comfyui-sam3",
+      "cnr_id": "comfyui-sam3",
+      "source": "NEEDS_SOURCE",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/comfyui-sam3",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "name": "comfyui-qwenvl",
+      "cnr_id": "comfyui-qwenvl",
+      "source": "NEEDS_SOURCE",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/comfyui-qwenvl",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "name": "ComfyUI-Inpaint-CropAndStitch",
+      "cnr_id": "comfyui-inpaint-cropandstitch",
+      "source": "https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-Inpaint-CropAndStitch",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "name": "seedvarianceenhancer",
+      "cnr_id": "seedvarianceenhancer",
+      "source": "NEEDS_SOURCE",
+      "type": "git_clone",
+      "downloadDestination": "/ComfyUI/custom_nodes/seedvarianceenhancer",
+      "associatedModel": null,
+      "usedInWorkflows": [
+        "zit/EndgameZimageIMG2IMG.json"
+      ]
+    },
+    {
+      "fileName": "ComfyUI-WanAnimatePreprocess",
+      "source": "https://github.com/kijai/ComfyUI-WanAnimatePreprocess",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-WanAnimatePreprocess",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Wan_Animate_V2",
+        "Steady_Dancer"
+      ]
+    },
+    {
+      "fileName": "ComfyUI-WanVideoWrapper",
+      "source": "https://github.com/kijai/ComfyUI-WanVideoWrapper",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Wan_Animate_V2",
+        "VACE",
+        "Steady_Dancer",
+        "HearmemanAI_Wan_Infinite_Talk"
+      ]
+    },
+    {
+      "fileName": "ComfyUI-segment-anything-2",
+      "source": "https://github.com/kijai/ComfyUI-segment-anything-2",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-segment-anything-2",
+      "usedInWorkflows": [
+        "Wan_Animate_V2",
+        "Wan_Animate_Replace_Person"
+      ]
+    },
+    {
+      "fileName": "ComfyUI_LayerStyle",
+      "source": "https://github.com/chflame163/ComfyUI_LayerStyle",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI_LayerStyle",
+      "usedInWorkflows": [
+        "VACE"
+      ]
+    },
+    {
+      "fileName": "cg-use-everywhere",
+      "source": "https://github.com/chrisgoringe/cg-use-everywhere",
+      "downloadDestination": "/ComfyUI/custom_nodes/cg-use-everywhere",
+      "usedInWorkflows": [
+        "Video Extend",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS",
+        "VACE"
+      ]
+    },
+    {
+      "fileName": "ComfyUI-Frame-Interpolation",
+      "source": "https://github.com/Fannovel16/ComfyUI-Frame-Interpolation",
+      "downloadDestination": "/ComfyUI/custom_nodes/ComfyUI-Frame-Interpolation",
+      "associatedModel": "Wan2.2",
+      "usedInWorkflows": [
+        "Video Extend",
+        "Wan_Animate_V2",
+        "Native-T2V-60FPS",
+        "Native-I2V-60FPS",
+        "VACE",
+        "Steady_Dancer"
+      ]
+    },
+    {
+      "fileName": "comfyui-rmbg",
+      "source": "https://github.com/1038lab/comfyui-rmbg",
+      "downloadDestination": "/ComfyUI/custom_nodes/comfyui-rmbg",
+      "usedInWorkflows": [
+        "VACE"
+      ]
+    },
+    {
+      "fileName": "comfyui_controlnet_aux",
+      "source": "https://github.com/Fannovel16/comfyui_controlnet_aux",
+      "downloadDestination": "/ComfyUI/custom_nodes/comfyui_controlnet_aux",
+      "usedInWorkflows": [
+        "Wan_Animate_Replace_Person",
+        "Wan_Animate_V2",
+        "VACE"
+      ]
+    },
+    {
+      "fileName": "masquerade-nodes-comfyui",
+      "source": "https://github.com/BadCafeCode/masquerade-nodes-comfyui",
+      "downloadDestination": "/ComfyUI/custom_nodes/masquerade-nodes-comfyui",
+      "usedInWorkflows": [
+        "VACE"
+      ]
+    },
+    {
+      "fileName": "mikey_nodes",
+      "source": "https://github.com/bash-j/mikey_nodes",
+      "downloadDestination": "/ComfyUI/custom_nodes/mikey_nodes",
+      "usedInWorkflows": [
+        "Misc"
+      ]
+    },
+    {
+      "fileName": "was-node-suite-comfyui",
+      "source": "https://github.com/WASasquatch/was-node-suite-comfyui",
+      "downloadDestination": "/ComfyUI/custom_nodes/was-node-suite-comfyui",
+      "usedInWorkflows": [
+        "VACE"
+      ]
+    }
+  ]
+}
