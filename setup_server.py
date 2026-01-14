@@ -1,312 +1,250 @@
 #!/usr/bin/env python3
 """
-ComfyUI Setup Server - Runs on RunPod instance
-===============================================
-A lightweight web service that allows remote configuration and installation
-of ComfyUI models and custom nodes.
+ComfyUI Setup Server
+====================
+Lightweight web server that runs on RunPod to handle model/node installation.
+Communicates with setupRunPodInstance.py running on your local machine.
 
 Usage:
     python setup_server.py
 
-One-liner for RunPod:
-    git clone https://github.com/YOUR_USER/YOUR_REPO.git /root/comfy-setup && python /root/comfy-setup/setup_server.py
-
 Endpoints:
-    GET  /                - Health check
-    GET  /status          - Get available models and current status
-    POST /install         - Start installation (JSON body: {"models": ["Wan2.2", "ZIT"], "tokens": {...}})
-    GET  /progress        - Server-Sent Events stream of installation progress
-    GET  /logs            - Get current log buffer
-    POST /stop            - Stop current installation
+    GET  /status   - Get server status and available models
+    POST /install  - Start installation (JSON body: {"models": [...], "hf_token": "...", ...})
+    GET  /progress - Server-Sent Events stream for progress updates
+    GET  /logs     - Get recent log messages
+    POST /stop     - Stop current installation
+    POST /pull     - Git pull latest changes
 """
 
+import http.server
 import json
 import os
-import queue
 import subprocess
 import sys
 import threading
 import time
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import queue
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
-import re
+from urllib.parse import urlparse, parse_qs
+from typing import Optional
 
+# Configuration
 PORT = 5111
-SCRIPT_DIR = Path(__file__).parent
-SOURCES_FILE = SCRIPT_DIR / "sources2.json"
-SETUP_SCRIPT = SCRIPT_DIR / "setup_remote.py"
+COMFY_DIR = Path("/workspace/ComfyUI")
+SETUP_DIR = Path(__file__).parent.resolve()
+SOURCES_FILE = SETUP_DIR / "sources2.json"
 
 # Global state
-installation_state = {
+installation_status = {
     "status": "idle",  # idle, running, completed, error
     "progress": 0,
     "current_task": "",
-    "started_at": None,
-    "completed_at": None,
     "error": None,
+    "started_at": None,
 }
-
 log_buffer = []
-log_buffer_lock = threading.Lock()
-progress_queue = queue.Queue()
-current_process = None
-process_lock = threading.Lock()
-
-# ANSI color codes for terminal output
-GREEN = '\033[0;32m'
-YELLOW = '\033[1;33m'
-CYAN = '\033[0;36m'
-RED = '\033[0;31m'
-BOLD = '\033[1m'
-NC = '\033[0m'
+log_queue = queue.Queue()
+progress_clients = []
+installation_thread = None
+stop_flag = threading.Event()
 
 
-def load_sources():
-    """Load sources2.json and return model info."""
-    if not SOURCES_FILE.exists():
-        return {"models": [], "custom_nodes": []}
-
-    with open(SOURCES_FILE) as f:
-        return json.load(f)
-
-
-def get_available_models():
-    """Get list of available model types from sources."""
-    sources = load_sources()
-
-    # Get unique associated models
-    models = set()
-    for item in sources.get("models", []):
-        if item.get("associatedModel"):
-            models.add(item.get("associatedModel"))
-
-    # Count items per model
-    model_info = {}
-    for model in models:
-        model_items = [m for m in sources.get("models", []) if m.get("associatedModel") == model]
-        node_items = [n for n in sources.get("custom_nodes", []) if n.get("associatedModel") == model]
-        model_info[model] = {
-            "models": len(model_items),
-            "custom_nodes": len(node_items),
-        }
-
-    # Add shared items (no associatedModel)
-    shared_models = [m for m in sources.get("models", []) if not m.get("associatedModel")]
-    shared_nodes = [n for n in sources.get("custom_nodes", []) if not n.get("associatedModel")]
-
-    return {
-        "available_models": sorted(list(models)),
-        "model_details": model_info,
-        "shared": {
-            "models": len(shared_models),
-            "custom_nodes": len(shared_nodes),
-        },
-        "total": {
-            "models": len(sources.get("models", [])),
-            "custom_nodes": len(sources.get("custom_nodes", [])),
-        }
+def log(message: str, level: str = "info"):
+    """Add a log message."""
+    entry = {
+        "time": time.strftime("%H:%M:%S"),
+        "level": level,
+        "message": message
     }
+    log_buffer.append(entry)
+    if len(log_buffer) > 1000:
+        log_buffer.pop(0)
+
+    # Notify progress clients
+    broadcast_event({"type": "log", "message": message, "level": level})
+    print(f"[{entry['time']}] [{level.upper()}] {message}")
 
 
-def add_log(message):
-    """Add a message to the log buffer and progress queue."""
-    timestamp = time.strftime("%H:%M:%S")
-    entry = f"[{timestamp}] {message}"
-
-    with log_buffer_lock:
-        log_buffer.append(entry)
-        # Keep last 1000 lines
-        if len(log_buffer) > 1000:
-            log_buffer.pop(0)
-
-    # Add to progress queue for SSE
-    progress_queue.put({"type": "log", "message": message})
+def broadcast_event(data: dict):
+    """Send event to all connected SSE clients."""
+    for q in progress_clients[:]:
+        try:
+            q.put_nowait(data)
+        except queue.Full:
+            pass
 
 
-def run_installation(models, tokens):
-    """Run the installation in a background thread."""
-    global installation_state, current_process
+def update_progress(progress: int, task: str = None):
+    """Update installation progress."""
+    installation_status["progress"] = progress
+    if task:
+        installation_status["current_task"] = task
 
-    installation_state["status"] = "running"
-    installation_state["progress"] = 0
-    installation_state["current_task"] = "Starting installation..."
-    installation_state["started_at"] = time.time()
-    installation_state["completed_at"] = None
-    installation_state["error"] = None
+    broadcast_event({
+        "progress": progress,
+        "current_task": task or installation_status["current_task"]
+    })
 
-    add_log(f"Starting installation for models: {', '.join(models)}")
-    progress_queue.put({"type": "status", "status": "running"})
+
+def load_sources() -> dict:
+    """Load sources from JSON file."""
+    if SOURCES_FILE.exists():
+        with open(SOURCES_FILE, "r") as f:
+            return json.load(f)
+    return {"models": [], "custom_nodes": []}
+
+
+def get_available_models() -> list:
+    """Get list of available model categories."""
+    sources = load_sources()
+    categories = set()
+    for model in sources.get("models", []):
+        for cat in model.get("models", []):
+            categories.add(cat)
+    return sorted(list(categories))
+
+
+def run_installation(models: list, hf_token: str = "", civitai_token: str = "", github_token: str = ""):
+    """Run the installation process."""
+    global installation_status
 
     try:
+        installation_status["status"] = "running"
+        installation_status["progress"] = 0
+        installation_status["error"] = None
+        installation_status["started_at"] = time.time()
+
+        log(f"Starting installation for models: {', '.join(models)}")
+        update_progress(5, "Loading sources...")
+
+        # Check if setup_remote.py exists
+        setup_script = SETUP_DIR / "setup_remote.py"
+        if not setup_script.exists():
+            raise FileNotFoundError(f"setup_remote.py not found at {setup_script}")
+
         # Build command
-        cmd = [sys.executable, str(SETUP_SCRIPT), "--models", ",".join(models)]
+        cmd = [sys.executable, str(setup_script)]
+        cmd.extend(["--models", ",".join(models)])
 
-        if tokens.get("hf_token"):
-            cmd.extend(["--hf-token", tokens["hf_token"]])
-        if tokens.get("civitai_token"):
-            cmd.extend(["--civitai-token", tokens["civitai_token"]])
-        if tokens.get("github_token"):
-            cmd.extend(["--github-token", tokens["github_token"]])
+        if hf_token:
+            cmd.extend(["--hf-token", hf_token])
+        if civitai_token:
+            cmd.extend(["--civitai-token", civitai_token])
+        if github_token:
+            cmd.extend(["--github-token", github_token])
 
-        add_log(f"Running: python setup_remote.py --models {','.join(models)}")
+        log(f"Running: {' '.join(cmd[:3])}...")
+        update_progress(10, "Starting download process...")
 
-        # Run process and capture output
-        with process_lock:
-            current_process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-                bufsize=1,
-                cwd=str(SCRIPT_DIR)
-            )
+        # Run the setup script
+        process = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+            cwd=str(SETUP_DIR)
+        )
 
         # Stream output
-        total_items = 0
-        completed_items = 0
+        line_count = 0
+        while True:
+            if stop_flag.is_set():
+                process.terminate()
+                log("Installation cancelled by user", "warning")
+                installation_status["status"] = "cancelled"
+                return
 
-        for line in current_process.stdout:
-            line = line.rstrip()
-            if not line:
-                continue
+            line = process.stdout.readline()
+            if not line and process.poll() is not None:
+                break
 
-            # Strip ANSI codes for logging
-            clean_line = re.sub(r'\033\[[0-9;]*m', '', line)
-            add_log(clean_line)
+            line = line.strip()
+            if line:
+                log(line)
+                line_count += 1
 
-            # Parse progress indicators
-            if "Downloading Models" in line:
-                match = re.search(r'\((\d+)', line)
-                if match:
-                    total_items = int(match.group(1))
-                installation_state["current_task"] = "Downloading models..."
-            elif "Installing Custom Nodes" in line:
-                match = re.search(r'\((\d+)', line)
-                if match:
-                    total_items = int(match.group(1))
-                installation_state["current_task"] = "Installing custom nodes..."
-            elif "✓" in clean_line or "Downloaded" in clean_line or "Installed" in clean_line:
-                completed_items += 1
-                if total_items > 0:
-                    installation_state["progress"] = min(95, int(completed_items / total_items * 90))
-            elif "↓" in clean_line:
-                # Extract filename being downloaded
-                match = re.search(r'↓\s*(?:Downloading\s+)?(.+?)(?:\.\.\.)?$', clean_line)
-                if match:
-                    installation_state["current_task"] = f"Downloading {match.group(1).strip()}..."
+                # Try to parse progress from output
+                if "%" in line:
+                    try:
+                        # Look for percentage in line
+                        import re
+                        match = re.search(r'(\d+)%', line)
+                        if match:
+                            pct = int(match.group(1))
+                            update_progress(10 + int(pct * 0.85), line[:60])
+                    except:
+                        pass
+                elif "Downloading" in line or "Cloning" in line:
+                    update_progress(installation_status["progress"], line[:60])
+                elif "Downloaded" in line or "Installed" in line:
+                    update_progress(min(95, installation_status["progress"] + 5), line[:60])
 
-            progress_queue.put({
-                "type": "progress",
-                "progress": installation_state["progress"],
-                "current_task": installation_state["current_task"]
-            })
+        return_code = process.wait()
 
-        current_process.wait()
-
-        with process_lock:
-            current_process = None
-
-        if installation_state["status"] == "running":  # Not cancelled
-            installation_state["status"] = "completed"
-            installation_state["progress"] = 100
-            installation_state["current_task"] = "Installation complete!"
-            installation_state["completed_at"] = time.time()
-            add_log("Installation completed successfully!")
-            progress_queue.put({"type": "status", "status": "completed"})
+        if return_code == 0:
+            update_progress(100, "Installation complete!")
+            installation_status["status"] = "completed"
+            log("Installation completed successfully!")
+            broadcast_event({"type": "status", "status": "completed"})
+        else:
+            installation_status["status"] = "error"
+            installation_status["error"] = f"Process exited with code {return_code}"
+            log(f"Installation failed with exit code {return_code}", "error")
+            broadcast_event({"type": "status", "status": "error", "error": installation_status["error"]})
 
     except Exception as e:
-        installation_state["status"] = "error"
-        installation_state["error"] = str(e)
-        add_log(f"Error: {e}")
-        progress_queue.put({"type": "error", "error": str(e)})
+        installation_status["status"] = "error"
+        installation_status["error"] = str(e)
+        log(f"Installation error: {e}", "error")
+        broadcast_event({"type": "status", "status": "error", "error": str(e)})
 
-        with process_lock:
-            current_process = None
+    finally:
+        stop_flag.clear()
 
 
-class SetupHandler(BaseHTTPRequestHandler):
-    """HTTP request handler for the setup server."""
+class SetupHandler(http.server.BaseHTTPRequestHandler):
+    """HTTP request handler with CORS support."""
 
     def log_message(self, format, *args):
-        # Custom logging
-        print(f"{CYAN}[HTTP]{NC} {args[0]}")
+        """Override to use our logging."""
+        log(f"HTTP: {args[0]}", "debug")
 
-    def send_json(self, data, status=200):
-        """Send JSON response."""
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json")
+    def send_cors_headers(self):
+        """Send CORS headers for all responses."""
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.end_headers()
-        self.wfile.write(json.dumps(data).encode())
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept, Origin, User-Agent")
+        self.send_header("Access-Control-Max-Age", "86400")
 
     def do_OPTIONS(self):
-        """Handle CORS preflight."""
+        """Handle CORS preflight requests."""
         self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_cors_headers()
+        self.send_header("Content-Length", "0")
         self.end_headers()
+
+    def send_json(self, data: dict, status: int = 200):
+        """Send JSON response with CORS headers."""
+        body = json.dumps(data).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_cors_headers()
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
     def do_GET(self):
         """Handle GET requests."""
         path = urlparse(self.path).path
 
-        if path == "/" or path == "/health":
-            self.send_json({
-                "status": "ok",
-                "service": "ComfyUI Setup Server",
-                "version": "1.0.0",
-            })
-
-        elif path == "/status":
-            models_info = get_available_models()
-            self.send_json({
-                "installation": installation_state,
-                "available": models_info,
-            })
-
-        elif path == "/logs":
-            with log_buffer_lock:
-                logs = list(log_buffer)
-            self.send_json({"logs": logs})
-
+        if path == "/" or path == "/status":
+            self.handle_status()
         elif path == "/progress":
-            # Server-Sent Events stream
-            self.send_response(200)
-            self.send_header("Content-Type", "text/event-stream")
-            self.send_header("Cache-Control", "no-cache")
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-
-            try:
-                # Send current state first
-                self.wfile.write(f"data: {json.dumps(installation_state)}\n\n".encode())
-                self.wfile.flush()
-
-                # Stream updates
-                while True:
-                    try:
-                        update = progress_queue.get(timeout=1)
-                        self.wfile.write(f"data: {json.dumps(update)}\n\n".encode())
-                        self.wfile.flush()
-
-                        # Stop streaming if installation completed or errored
-                        if update.get("type") == "status" and update.get("status") in ["completed", "error"]:
-                            break
-                    except queue.Empty:
-                        # Send keepalive
-                        self.wfile.write(b": keepalive\n\n")
-                        self.wfile.flush()
-
-                        # Check if installation finished
-                        if installation_state["status"] in ["completed", "error", "idle"]:
-                            break
-            except (BrokenPipeError, ConnectionResetError):
-                pass
-
+            self.handle_progress_stream()
+        elif path == "/logs":
+            self.handle_logs()
         else:
             self.send_json({"error": "Not found"}, 404)
 
@@ -315,123 +253,180 @@ class SetupHandler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
 
         if path == "/install":
-            # Check if already running
-            if installation_state["status"] == "running":
-                self.send_json({"error": "Installation already in progress"}, 409)
-                return
-
-            # Parse request body
-            content_length = int(self.headers.get("Content-Length", 0))
-            body = self.rfile.read(content_length)
-
-            try:
-                data = json.loads(body) if body else {}
-            except json.JSONDecodeError:
-                self.send_json({"error": "Invalid JSON"}, 400)
-                return
-
-            models = data.get("models", [])
-            if not models:
-                self.send_json({"error": "No models specified"}, 400)
-                return
-
-            tokens = {
-                "hf_token": data.get("hf_token", ""),
-                "civitai_token": data.get("civitai_token", ""),
-                "github_token": data.get("github_token", ""),
-            }
-
-            # Clear log buffer
-            with log_buffer_lock:
-                log_buffer.clear()
-
-            # Clear progress queue
-            while not progress_queue.empty():
-                try:
-                    progress_queue.get_nowait()
-                except queue.Empty:
-                    break
-
-            # Start installation in background thread
-            thread = threading.Thread(target=run_installation, args=(models, tokens))
-            thread.daemon = True
-            thread.start()
-
-            self.send_json({
-                "status": "started",
-                "models": models,
-                "message": "Installation started. Use /progress for updates."
-            })
-
+            self.handle_install()
         elif path == "/stop":
-            global current_process
-
-            with process_lock:
-                if current_process:
-                    current_process.terminate()
-                    current_process = None
-
-            installation_state["status"] = "idle"
-            installation_state["current_task"] = "Cancelled"
-            add_log("Installation cancelled by user")
-
-            self.send_json({"status": "stopped"})
-
+            self.handle_stop()
         elif path == "/pull":
-            # Pull latest from git
-            try:
-                result = subprocess.run(
-                    ["git", "pull"],
-                    cwd=str(SCRIPT_DIR),
-                    capture_output=True,
-                    text=True,
-                    timeout=30
-                )
-                self.send_json({
-                    "status": "ok",
-                    "output": result.stdout + result.stderr
-                })
-            except Exception as e:
-                self.send_json({"error": str(e)}, 500)
-
+            self.handle_pull()
         else:
             self.send_json({"error": "Not found"}, 404)
+
+    def handle_status(self):
+        """Return server status."""
+        sources = load_sources()
+        available_models = get_available_models()
+
+        response = {
+            "status": "online",
+            "installation": installation_status.copy(),
+            "available": {
+                "available_models": available_models,
+                "total": {
+                    "models": len(sources.get("models", [])),
+                    "custom_nodes": len(sources.get("custom_nodes", []))
+                }
+            },
+            "comfy_dir": str(COMFY_DIR),
+            "comfy_exists": COMFY_DIR.exists()
+        }
+        self.send_json(response)
+
+    def handle_install(self):
+        """Start installation."""
+        global installation_thread
+
+        if installation_status["status"] == "running":
+            self.send_json({"error": "Installation already running"}, 400)
+            return
+
+        try:
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8")
+            data = json.loads(body) if body else {}
+        except json.JSONDecodeError:
+            self.send_json({"error": "Invalid JSON"}, 400)
+            return
+
+        models = data.get("models", [])
+        if not models:
+            self.send_json({"error": "No models specified"}, 400)
+            return
+
+        hf_token = data.get("hf_token", "")
+        civitai_token = data.get("civitai_token", "")
+        github_token = data.get("github_token", "")
+
+        # Start installation in background thread
+        stop_flag.clear()
+        installation_thread = threading.Thread(
+            target=run_installation,
+            args=(models, hf_token, civitai_token, github_token),
+            daemon=True
+        )
+        installation_thread.start()
+
+        self.send_json({"status": "started", "models": models})
+
+    def handle_progress_stream(self):
+        """Stream progress updates via Server-Sent Events."""
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Connection", "keep-alive")
+        self.send_cors_headers()
+        self.end_headers()
+
+        # Create a queue for this client
+        client_queue = queue.Queue(maxsize=100)
+        progress_clients.append(client_queue)
+
+        try:
+            # Send initial status
+            self.wfile.write(f"data: {json.dumps(installation_status)}\n\n".encode())
+            self.wfile.flush()
+
+            while True:
+                try:
+                    # Wait for event with timeout
+                    event = client_queue.get(timeout=30)
+                    self.wfile.write(f"data: {json.dumps(event)}\n\n".encode())
+                    self.wfile.flush()
+
+                    # Check if installation is done
+                    if event.get("type") == "status" and event.get("status") in ["completed", "error"]:
+                        break
+
+                except queue.Empty:
+                    # Send keepalive
+                    self.wfile.write(b": keepalive\n\n")
+                    self.wfile.flush()
+
+        except (BrokenPipeError, ConnectionResetError):
+            pass
+        finally:
+            if client_queue in progress_clients:
+                progress_clients.remove(client_queue)
+
+    def handle_logs(self):
+        """Return recent logs."""
+        self.send_json({"logs": log_buffer[-100:]})
+
+    def handle_stop(self):
+        """Stop current installation."""
+        if installation_status["status"] != "running":
+            self.send_json({"error": "No installation running"}, 400)
+            return
+
+        stop_flag.set()
+        self.send_json({"status": "stopping"})
+
+    def handle_pull(self):
+        """Git pull latest changes."""
+        try:
+            result = subprocess.run(
+                ["git", "pull"],
+                cwd=str(SETUP_DIR),
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            self.send_json({
+                "status": "success" if result.returncode == 0 else "error",
+                "output": result.stdout,
+                "error": result.stderr if result.returncode != 0 else None
+            })
+        except Exception as e:
+            self.send_json({"status": "error", "error": str(e)}, 500)
+
+
+class ThreadedHTTPServer(http.server.ThreadingHTTPServer):
+    """HTTP server that handles requests in threads."""
+    allow_reuse_address = True
 
 
 def main():
     print(f"""
-{BOLD}{CYAN}╔══════════════════════════════════════════════════════════╗
-║           ComfyUI Setup Server                           ║
-╚══════════════════════════════════════════════════════════╝{NC}
+╔═══════════════════════════════════════════════════════════════╗
+║          ComfyUI Setup Server v2.0                            ║
+╠═══════════════════════════════════════════════════════════════╣
+║  Port: {PORT}                                                   ║
+║  Sources: {str(SOURCES_FILE)[:45]:<45} ║
+║  ComfyUI: {str(COMFY_DIR)[:45]:<45} ║
+╚═══════════════════════════════════════════════════════════════╝
+    """)
 
-  {GREEN}►{NC} Server running on port {BOLD}{PORT}{NC}
-  {GREEN}►{NC} Sources file: {SOURCES_FILE}
-
-  {BOLD}Endpoints:{NC}
-    GET  /status   - Get available models and status
-    POST /install  - Start installation
-    GET  /progress - Stream progress (SSE)
-    GET  /logs     - Get log buffer
-    POST /stop     - Cancel installation
-    POST /pull     - Git pull latest changes
-
-  {YELLOW}Waiting for connections...{NC}
-  Press Ctrl+C to stop
-""")
-
-    # Check if sources file exists
+    # Check for sources file
     if not SOURCES_FILE.exists():
-        print(f"{RED}Warning: {SOURCES_FILE} not found!{NC}")
+        print(f"[WARNING] Sources file not found: {SOURCES_FILE}")
+        print("          The server will start but no models are configured.")
 
-    if not SETUP_SCRIPT.exists():
-        print(f"{RED}Warning: {SETUP_SCRIPT} not found!{NC}")
-
-    server = HTTPServer(("0.0.0.0", PORT), SetupHandler)
+    # Start server
+    server = ThreadedHTTPServer(("0.0.0.0", PORT), SetupHandler)
+    print(f"Server listening on port {PORT}...")
+    print(f"Access via RunPod proxy: https://YOUR_POD_ID-{PORT}.proxy.runpod.net/")
+    print("\nEndpoints:")
+    print("  GET  /status   - Server status and available models")
+    print("  POST /install  - Start installation")
+    print("  GET  /progress - SSE progress stream")
+    print("  GET  /logs     - Recent log messages")
+    print("  POST /stop     - Cancel installation")
+    print("  POST /pull     - Git pull updates")
+    print("\nPress Ctrl+C to stop.\n")
 
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print(f"\n{YELLOW}Server stopped{NC}")
+        print("\nShutting down...")
         server.shutdown()
 
 
